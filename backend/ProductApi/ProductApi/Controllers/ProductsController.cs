@@ -35,5 +35,39 @@ namespace ProductApi.Controllers
 
             return Ok(productRequest);
         }
+
+        [HttpGet]
+        [Route("{id:Guid}")]
+        public async Task<IActionResult> GetProduct([FromRoute] Guid id)
+        {
+            var product = await _productDbContext.Products.FirstOrDefaultAsync(x => x.Id == id);
+            
+            if (product == null)
+            {
+                return NotFound();
+            }
+            return Ok(product);
+        }
+
+        [HttpPut]
+        [Route("{id:Guid}")]
+        public async Task<IActionResult> UpdateProduct([FromRoute] Guid id, [FromBody] Product productRequest)
+        {
+            var product = await _productDbContext.Products.FindAsync(id);
+
+            if (product == null)
+            {
+                return NotFound();
+            }
+
+            product.Name = productRequest.Name;
+            product.Description = productRequest.Description;
+            product.Price = productRequest.Price;
+            product.Brand = productRequest.Brand;
+
+            await _productDbContext.SaveChangesAsync();
+
+            return Ok(product);
+        }
     }
 }
