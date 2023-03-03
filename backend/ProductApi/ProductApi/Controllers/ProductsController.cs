@@ -69,5 +69,22 @@ namespace ProductApi.Controllers
 
             return Ok(product);
         }
+
+        [HttpDelete]
+        [Route("{id:Guid}")]
+        public async Task<IActionResult> DeleteProduct([FromRoute] Guid id)
+        {
+            var product = await _productDbContext.Products.FindAsync(id);
+                
+            if (product == null)
+            {
+                return NotFound();
+            }
+
+            _productDbContext.Products.Remove(product);
+            await _productDbContext.SaveChangesAsync();
+            return Ok(product);
+        }
+
     }
 }

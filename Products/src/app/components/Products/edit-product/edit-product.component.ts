@@ -45,4 +45,12 @@ export class EditProductComponent implements OnInit {
     })
   }
 
+  deleteProduct(id: string) {
+    this.productService.deleteProduct(this.productDetails.id).subscribe({
+      next: (response) => {
+        this.router.navigate(['products']);
+      }
+    })
+  }
+
 }
